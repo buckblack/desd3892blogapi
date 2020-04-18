@@ -1,0 +1,91 @@
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Admin Notifications</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a [routerLink]="['/']">Home</a></li>
+                        <li class="breadcrumb-item active">General Form</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <!-- Form Element sizes -->
+                    <div class="card card-outline card-info">
+                        <div class="card-header">
+                            <h3 class="card-title">Create Notify</h3>
+                        </div>
+                        <div class="card-body row">
+                            <div class="form-group col-12">
+                                <label>Title</label>
+                                <input type="text" [(ngModel)]="title" #titleCheck="ngModel" class="form-control" required placeholder="Enter title">
+                                <small class="text-danger" *ngIf="checked && titleCheck.invalid">Please enter title</small>
+                            </div>
+                            <div class="form-group col-12">
+                                <label>Content</label>
+                                <ckeditor required #contentCheck="ngModel" [(ngModel)]="content" [config]="{ toolbarGroups : [
+                                    { name: 'document', groups: ['mode', 'document', 'doctools'] },
+                                    { name: 'clipboard', groups: ['clipboard', 'undo'] },
+                                    { name: 'editing', groups: ['find', 'selection', 'spellchecker', 'editing'] },
+                                    { name: 'forms', groups: ['forms'] },
+                                    '/',
+                                    { name: 'basicstyles', groups: ['basicstyles', 'cleanup'] },
+                                    { name: 'paragraph', groups: ['list', 'indent', 'blocks', 'align', 'bidi', 'paragraph'] },
+                                    { name: 'links', groups: ['links'] },
+                                    { name: 'insert', groups: ['insert'] },
+                                    '/',
+                                    { name: 'styles', groups: ['styles'] },
+                                    { name: 'colors', groups: ['colors'] },
+                                    { name: 'tools', groups: ['tools'] },
+                                    { name: 'others', groups: ['others'] },
+                                    { name: 'about', groups: ['about'] }
+                                ]
+                            }"></ckeditor>
+                            <small class="text-danger" *ngIf="checked && contentCheck.invalid">Please enter content</small>
+                            </div>
+                            <div class="col-12">
+                                <button class="btn btn-success w-100" (click)="checked=true; titleCheck.valid && modalConfirm.show()">Submit</button>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+</div>
+
+<!-- Modal confirm -->
+<div class="modal fade" bsModal #modalConfirm="bs-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm</h5>
+                    <button type="button" class="close" (click)="modalConfirm.hide()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                Submit Notify?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="modalConfirm.hide()">No</button>
+                <button type="button" class="btn btn-primary" (click)="SubmitNotify()">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>

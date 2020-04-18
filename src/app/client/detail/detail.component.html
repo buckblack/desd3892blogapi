@@ -1,0 +1,184 @@
+<div id="detail" class="site-cover site-cover-sm same-height overlay single-page">
+    <div class="container">
+        <div class="row same-height justify-content-center">
+            <div class="col-md-12 col-lg-10">
+                <div class="post-entry text-center">
+                    <h1 class="mb-4">{{postDetail.postTitle}}</h1>
+                    <div class="post-meta align-items-center text-center">
+                        <span>{{postDetail.dateCreate | date:'short'}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="site-section py-lg">
+    <div class="container row mx-auto">
+        <!-- END main-content -->
+        <div class="col-md-12 col-lg-8">
+
+            <div class="post-content-body" [style.text-align]="'justify'" [innerHTML]="postDetail.detailContent">
+            </div>
+
+            <div class="pt-5">
+                <h3 id="comment" class="mb-5">Comments ({{lstComment.length}})</h3>
+                <ul class="comment-list">
+                    <li *ngFor="let row of lstComment | paginate: { itemsPerPage: 10, currentPage: pageComment }" class="comment" [style.border-bottom]="'#e2dede 1px solid'">
+                        <div class="comment-body float-none">
+                            <h3>{{row.guest.fullName}}</h3>
+                            <div class="meta">{{row.dateCreate | date:'short'}}</div>
+                            <p class="ml-4">{{row.contentComment}}</p>
+                        </div>
+                    </li>
+                    
+                </ul>
+                    <pagination-controls class="my-pagination" responsive="true" (pageChange)="pageComment = $event"></pagination-controls>
+                
+                <!-- END comment-list -->
+
+                <div class="comment-form-wrap pt-5 mx-a">
+                    <h3 class="mb-5">Leave a comment</h3>
+                    <form [formGroup]="formComment" (ngSubmit)="submitComment()" class="p-5 bg-light">
+                        <div class="form-group">
+                            <label for="name">Name *</label>
+                            <input type="text" formControlName="guestName" class="form-control" id="name">
+                            <small *ngIf="submitted && formComment.controls.guestName.invalid" class="form-text text-danger">your name is not accepted</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" formControlName="guestEmail" class="form-control" id="email" required>
+                            <small *ngIf="submitted && formComment.controls.guestEmail.invalid" class="form-text text-danger">your email is not accepted</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea formControlName="contentComment" id="message" cols="30" rows="6" class="form-control"></textarea>
+                            <small *ngIf="submitted && formComment.controls.contentComment.invalid" class="form-text text-danger">your message is not accepted (50 chracter)</small>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Post Comment" class="btn btn-primary">
+                            <span class="ml-1 text-danger">{{message}}</span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+        <!-- END main-content -->
+
+        <div class="col-md-12 col-lg-4">
+            <div class="sidebar-box search-form-wrap">
+                <form action="#" class="search-form">
+                    <div class="form-group">
+                        <span class="icon fa fa-search"></span>
+                        <input type="text" class="form-control" id="s" placeholder="Type a keyword and hit enter">
+                    </div>
+                </form>
+            </div>
+            <!-- END sidebar-box -->
+            <div class="sidebar-box">
+                <div class="bio text-center">
+                    <img src="{{userAvatarPath}}{{postDetail.user.pathAvatar}}" alt="Image Placeholder" class="img-fluid mb-3">
+                    <div class="bio-body">
+                        <h2>{{postDetail.user.fullName}}</h2>
+                        <p class="mb-4">{{postDetail.user.description}}</p>
+                    </div>
+                </div>
+            </div>
+            <!-- END sidebar-box -->
+            <div class="sidebar-box">
+                <h3 class="heading">Popular Posts</h3>
+                <div class="post-entry-sidebar">
+                    <ul>
+                        
+                        <li *ngFor="let row of lstPostPopular">
+                            <a [routerLink]="['/Detail',row.id]" (click)="scrollTop()">
+                                <img src="{{row.pathThumbnail}}" alt="{{row.postTitle}}" class="mr-4 float-left">
+                                <div class="text">
+                                    <h6 [style.color]="'#000'">{{row.postTitle}}</h6>
+                                </div>
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </div>
+            </div>
+            <!-- END sidebar-box -->
+
+            <div class="sidebar-box">
+                <h3 class="heading">Categories</h3>
+                <ul class="categories">
+                    
+                        <li *ngFor="let row of lstSubCategory"><a [routerLink]="['/subcategory',row.id]">{{row.subCateName}}<span>({{row.countPost}})</span></a></li>
+                    
+                </ul>
+            </div>
+            <!-- END sidebar-box -->
+        </div>
+        <!-- END sidebar -->
+    </div>
+</section>
+
+<div class="site-section bg-light">
+    <div class="container">
+
+        <div class="row mb-5">
+            <div class="col-12">
+                <h2 id="detailpopular">Related Posts</h2>
+            </div>
+        </div>
+
+        <div class="row align-items-stretch retro-layout">
+
+            <div *ngFor="let row of lstPostRelated" class="col-12 col-sm-5  col-md-4 col-lg-3">
+                <a [routerLink]="['/Detail',row.id]" (click)="scrollTop()" class="hentry img-2 v-height mb30 gradient" [style.background-image]= "'url('+row.pathThumbnail+')'">
+                    <div class="text text-sm">
+                        <h2>{{row.postTitle}}</h2>
+                        <span>{{row.dateCreate | date:'short'}}</span>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-md-12">
+        <ul class="pagination justify-content-center">
+            <div *ngIf="1===currentPage; then thenPrev else elsePrev"></div>
+            <ng-template #thenPrev>
+              <li class="page-item disabled">
+                <a class="page-link" tabindex="-1">Previous</a>
+              </li>
+            </ng-template>
+            <ng-template #elsePrev>
+              <li class="page-item">
+                <a pageScroll class="page-link" (click)="loadNewPagePostRelated(currentPage- 1)" tabindex="-1">Previous</a>
+              </li>
+            </ng-template>
+      
+            <ng-container *ngFor="let row of [].constructor(totalPage); let i = index">
+              <div *ngIf="(i+1)===currentPage; then thenBlock else elseBlock"></div>
+              <ng-template #thenBlock>
+                <li class="page-item active">
+                  <a class="page-link">{{i+1}} <span class="sr-only">(current)</span></a>
+                </li>
+              </ng-template>
+              <ng-template #elseBlock>
+                <li pageScroll class="page-item"><a (click)="loadNewPagePostRelated(i+1)" class=" page-link">{{i+1}}</a></li>
+              </ng-template>
+            </ng-container>
+      
+            <div *ngIf="totalPage===currentPage; then thenNext else elseNext"></div>
+            <ng-template #thenNext>
+              <li class="page-item disabled">
+                <a class="page-link">Next</a>
+              </li>
+            </ng-template>
+            <ng-template #elseNext>
+              <li class="page-item">
+                <a pageScroll class="page-link" (click)="loadNewPagePostRelated(totalPage)" tabindex="-1">Next</a>
+              </li>
+            </ng-template>
+          </ul>
+    </div>
+</div>
+<app-subscribe></app-subscribe>

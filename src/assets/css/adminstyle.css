@@ -1,0 +1,73 @@
+﻿.table-border-top{
+    border-top: green solid !important;
+}
+
+.post-content-body{
+    overflow: hidden !important;
+}
+
+.post-content-body img {
+    max-width: 100% !important;
+}
+.modal-scroll {
+    overflow-y: auto !important;
+  }
+
+.full-modal{
+    width: 95% !important;
+    max-width: unset !important;
+}
+.post-thumbnail-admin{
+    width:200px !important;
+}
+.user-thumbnail-admin {
+    width: 75px !important;
+}
+.img-admin-avatar{
+    width: 35px !important;
+    height: 35px !important;
+}
+.add-new-img-post-content{
+    padding:5px;
+    background-color: #ebe9e9;
+    max-width:100% !important;
+}
+.add-new-img-post-content-author {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.admin-summarycontent{
+    min-width: 300px;
+}
+
+.admin-title{
+    min-width: 150px;
+}
+
+.admin-user{
+    min-width: 120px;
+}
+.admin-button-action{
+    min-width: 80px;
+}
+.pointer{
+    cursor: pointer;
+}
+
+.limit-text{
+    width: 150px;
+    max-width: 150px;
+    overflow: hidden;
+    white-space: nowrap; 
+    text-overflow: ellipsis;
+}
+.height-chart{
+    max-height: 700px;
+}
+.custom-tooltip-chart{
+    display: block;
+    background-color: rgba(0,0, 0, 0.7);
+    color: #fff;
+    padding: 8px;
+}

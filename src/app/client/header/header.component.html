@@ -1,0 +1,46 @@
+<header class="site-navbar" role="banner">
+    <div class="container-fluid">
+        <div class="row align-items-center">
+
+            <div class="col-12 search-form-wrap js-search-form {{activeForm===true?'active':''}}">
+                <form id="searchForm" method="get">
+                    <input type="text" name="searchKey" [(ngModel)]="keySearch" class="form-control" placeholder="Search...">
+                    <div class="search-btn"><i (click)="search()" class="fa fa-search"></i>&nbsp; &nbsp;<i (click)="activeFormSearch()" class="fa fa-remove"></i></div>
+                </form>
+            </div>
+
+            <div class="col-4 site-logo">
+                <a [routerLink]="['/']" class="text-black h2 mb-0">Mini Blog</a>
+            </div>
+
+            <div class="col-8 text-right">
+                <nav class="site-navigation" role="navigation">
+                    <ul class="site-menu js-clone-nav mr-auto d-none d-lg-block mb-0">
+                        <li><a [routerLink]="['/']">Home</a></li>
+                        <li *ngFor="let row of lstCategory"><a [routerLink]="['/category', row.id]">{{row.cateName}}</a></li>
+                        <li class="d-none d-lg-inline-block"><a (click)="activeFormSearch()"><i class="fa fa-search"></i></a></li>
+                    </ul>
+                </nav>
+                <a #toggleButton class="site-menu-toggle js-menu-toggle text-black d-inline-block d-lg-none"><i class="fa fa-bars"></i></a>
+            </div>
+        </div>
+
+    </div>
+</header>
+<div class="site-mobile-menu">
+    <div class="site-mobile-menu-header">
+        <div class="site-mobile-menu-close mt-3">
+            <span class="icon-close2 js-menu-toggle"></span>
+        </div>
+    </div>
+    <div class="site-mobile-menu-body text-toggle-mobile text-center">
+        <p><a href="javascript: void(0);" (click)="toggleButton.click()" [routerLink]="['/']">Home</a></p>
+        <p *ngFor="let row of lstCategory"><a (click)="toggleButton.click()" href="javascript: void(0);" [routerLink]="['/category', row.id]">{{row.cateName}}</a></p>
+        <div class="input-group">
+            <input type="text" [(ngModel)]="keySearch" class="form-control input-mobile" placeholder="Search">
+            <div class="input-group-append">
+                <button (click)="search()" class="btn btn-outline-secondary btn-search-mobile" type="button"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+    </div>
+</div>

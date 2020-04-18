@@ -1,0 +1,253 @@
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>Category</h1>
+        </div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a [routerLink]="['/admin']">Home</a></li>
+            <li class="breadcrumb-item active">Category</li>
+          </ol>
+        </div>
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <!-- general form elements -->
+          <div class="card card-warning">
+            <div class="card-header">
+              <h3 class="card-title">Filter and Create</h3>
+            </div>
+            <!-- /.card-header -->
+            <!-- form start -->
+            <div class="row card-body">
+              <div class="form-group col-md-6">
+                <label>Category</label>
+                <select [(ngModel)]="slCategory" (change)="changeSubcategory()" class="form-control">
+                  <option *ngFor="let row of lstCategoryOption" [value]="row.id">{{row.cateName}}</option>
+                </select>
+              </div>
+              <div class="form-group col-md-6">
+                <label>Sub-Category</label>
+                <select [(ngModel)]="slSubCategory" class="form-control">
+                  <option *ngFor="let row of lstSubCategoryOption" [value]="row.id">{{row.subCateName}}</option>
+                </select>
+              </div>
+              <div class="form-group col-md-6">
+                <button class="btn btn-success w-100" (click)="addNewCategory()">New Category</button>
+              </div>
+              <div class="form-group col-md-6">
+                <button class="btn btn-success w-100" (click)="addNewSubcategory()">New Sub-Category</button>
+              </div>
+            </div>
+          </div>
+          <!-- /.card -->
+          <!-- Form Element sizes -->
+          <div class="card card-outline card-info">
+            <div class="card-header">
+              <h3 class="card-title">Sort Result</h3>
+            </div>
+            <div class="card-body px-0">
+              <div *ngIf="tableCategory; then tableCate else tableSubCate"></div>
+              <ng-template #tableCate>
+                <table class="w-100 table table-hover table-bordered">
+                  <thead class="text-center">
+                    <tr>
+                      <th>Id</th>
+                      <th>Name</th>
+                      <th>Sub-Category Count</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="text-center" *ngFor="let row of lstTableCategory">
+                      <td>{{row.id}}</td>
+                      <td>{{row.cateName}}</td>
+                      <td>{{row.subCategories.length}}</td>
+                      <td>
+                        <button class="btn btn-outline-warning" title="Edit" (click)="updateCategory(row.id)"><i
+                            class="fa fa-pencil-square-o"></i></button>
+                        <button class="btn btn-outline-danger" title="Delete"
+                          (click)="removeConfirm(row.id,row.cateName,true)"><i class="fa fa-trash-o"></i></button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </ng-template>
+              <ng-template #tableSubCate>
+                <table class="w-100 table table-hover table-bordered">
+                  <thead class="text-center">
+                    <tr>
+                      <th>Id</th>
+                      <th>Name</th>
+                      <th>Image</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="text-center" *ngFor="let row of lstTableSubCategory">
+                      <td>{{row.id}}</td>
+                      <td>{{row.subCateName}}</td>
+                      <td><img src="{{row.pathThumbnail}}" alt="{{row.subCateName}}"
+                          class="img-thumbnail post-thumbnail-admin"></td>
+                      <td>
+                        <button class="btn btn-outline-warning" title="Edit" (click)="updateSubCategory(row.id)"><i
+                            class="fa fa-pencil-square-o"></i></button>
+                        <button class="btn btn-outline-danger" title="Delete"
+                          (click)="removeConfirm(row.id,row.subCateName,false)"><i class="fa fa-trash-o"></i></button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </ng-template>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+      </div>
+      <!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </section>
+  <!-- /.content -->
+</div>
+
+<!-- Modal new -->
+<div bsModal #modalNew="bs-modal" class="modal fade">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{cateOrSubCate?"New Category":"New Sub-Category"}}</h5>
+        <button type="button" class="close" (click)="modalNew.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form enctype="multipart/form-data" (ngSubmit)="submitNew()">
+        <div class="modal-body">
+          <div class="container-fluid">
+            <div *ngIf="cateOrSubCate; then modalNewCate else modalNewSubCate"></div>
+            <ng-template #modalNewCate>
+              <div class="form-group">
+                <label for="categoryName">Category Name</label>
+                <input type="text" class="form-control" [(ngModel)]="cateNameNew" name="cateNameNew" placeholder="Enter name">
+              </div>
+            </ng-template>
+            <ng-template #modalNewSubCate>
+              <div class="form-group">
+                <label for="categoryName">Category Name</label>
+                <input type="text" class="form-control" [(ngModel)]="cateNameNew" name="cateNameNew" readonly
+                  placeholder="Enter name">
+              </div>
+              <div class="form-group">
+                <label for="categoryName">Sub Category Name</label>
+                <input type="text" class="form-control" [(ngModel)]="subCateNameNew" name="subCateNameNew" placeholder="Enter name">
+              </div>
+              <div class="form-group">
+                <label for="exampleInputFile">Thumbnail</label>
+                <div class="custom-file">
+                  <input type="file" (change)="handleUploadNew($event)" 
+                    class="custom-file-input" name="thumbnailSubCate">
+                  <label class="custom-file-label" for="customFile" #fileNameNew>Choose file</label>
+                </div>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="modalNew.hide()">Close</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal update -->
+<div bsModal #modalUpdate="bs-modal" class="modal fade">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{cateOrSubCate?"Update Category":"Update Sub-Category"}}</h5>
+        <button type="button" class="close" (click)="modalUpdate.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form enctype="multipart/form-data" (ngSubmit)="submitUpdate()">
+        <div class="modal-body">
+          <div class="container-fluid">
+            <div *ngIf="cateOrSubCate; then modalUpdateCate else modalUpdateSubCate"></div>
+            <ng-template #modalUpdateCate>
+              <div class="form-group">
+                <label for="categoryName">Category Name</label>
+                <input type="text" class="form-control" [(ngModel)]="updateCategoryName" name="cateName"
+                  placeholder="Enter name">
+              </div>
+            </ng-template>
+            <ng-template #modalUpdateSubCate>
+              <div class="form-group">
+                <label>Category</label>
+                <select [(ngModel)]="slCategoryUpdate" name="slCategoryUpdate" class="form-control">
+                  <option *ngFor="let row of lstCategoryOptionUpdate" [value]="row.id">{{row.cateName}}</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="categoryName">Sub Category Name</label>
+                <input type="text" class="form-control" [(ngModel)]="updateSubCategoryName" name="subCateName"
+                  placeholder="Enter name">
+              </div>
+              <div class="form-group">
+                <label for="exampleInputFile">Thumbnail</label>
+                <div class="custom-file">
+                  <input type="file" (change)="handleUploadUpdate($event)" class="custom-file-input"
+                    name="thumbnailSubCate">
+                  <label class="custom-file-label" for="customFile" #fileNameUpdate>Choose file</label>
+                </div>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="modalUpdate.hide()">Close</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal confirm delete -->
+<div bsModal #modalConfirmDelete="bs-modal" class="modal fade">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{cateOrSubCate?"Delete Category":"Delete Sub-Category"}}</h5>
+        <button type="button" class="close" (click)="modalConfirmDelete.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">
+          <div class="h1">Delete ["{{nameRemove}}"]?</div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modalConfirmDelete.hide()">No</button>
+        <div *ngIf="cateOrSubCate; then modalDeleteCate else modalDeleteSubCate"></div>
+        <ng-template #modalDeleteCate>
+          <button type="button" class="btn btn-primary" (click)="deleteCategory()">Yes</button>
+        </ng-template>
+        <ng-template #modalDeleteSubCate>
+          <button type="button" class="btn btn-primary" (click)="deleteSubCategory()">Yes</button>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

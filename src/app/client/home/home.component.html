@@ -1,0 +1,57 @@
+<div class="site-section bg-light">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-12">
+                <h2>Popular</h2>
+            </div>
+        </div>
+        <div class="row align-items-stretch retro-layout-2">
+            <div *ngFor="let row of lstPostsHot" class="col-md-4 col-sm-6">
+                <a [routerLink]="['/Detail',row.id]" [style.backgroundImage]="'url('+row.pathThumbnail+')'" class="h-entry mb-30 v-height gradient">
+                    <div class="text">
+                        <h2>{{row.postTitle}}</h2>
+                        <span class="date">{{row.dateCreate | date:'short'}}</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="site-section" id="recent">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-12">
+                <h2>Recent Posts</h2>
+            </div>
+        </div>
+
+        <app-postpaging></app-postpaging>
+
+    </div>
+</div>
+
+<div class="site-section bg-light">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-12">
+                <h2>Recent Comment</h2>
+            </div>
+        </div>
+        <div class="row align-items-stretch retro-layout">
+                <div *ngFor="let row of lstPostsRecentcomment" class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <a [routerLink]="['/Detail',row.id]" class="hentry img-2 v-height mb30 gradient" [style.backgroundImage]="'url('+row.pathThumbnail+')'">
+                        <span class="post-category text-white bg-success">{{row.subCategories.subCateName}}</span>
+                        <div class="text text-sm">
+                            <h2>{{row.postTitle}}</h2>
+                            <span>{{row.dateCreate}}</span>
+                        </div>
+                    </a>
+                </div>
+            
+        </div>
+
+    </div>
+</div>
+
+<app-subscribe></app-subscribe>

@@ -1,0 +1,159 @@
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+  <!-- Brand Logo -->
+  <a [routerLink]="['/admin']" class="brand-link">
+    <img src="/assets/images/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+      style="opacity: .8">
+    <span class="brand-text font-weight-light">Mini Blog</span>
+  </a>
+
+  <!-- Sidebar -->
+  <div class="sidebar" style="padding-left: 8px;">
+    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+      <div class="image">
+        <img src="{{pathAvatar}}" class="img-circle elevation-2 img-admin-avatar" alt="{{userName}}">
+      </div>
+      <div class="info">
+        <a class="d-block">{{userName}} | {{roleName}}</a>
+      </div>
+    </div>
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        <!-- Add icons to the links using the .nav-icon class
+                with font-awesome or any other icon font library -->
+        <li class="nav-item">
+          <a #dashboard [routerLink]="['/admin/dashboard']" routerLinkActive="active" (click)="activeLink('dashboard')"
+            class="nav-link">
+            <i class="nav-icon fa fa-tachometer"></i>
+            <p>
+              Dashboard
+            </p>
+          </a>
+        </li>
+        <li class="nav-item has-treeview">
+          <a routerLinkActive="active" #content class="nav-link pointer">
+            <i class="nav-icon fa fa-edit"></i>
+            <p>
+              Content
+              <i class="fa fa-angle-left right"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a [routerLink]="['/admin/post']" routerLinkActive="active" (click)="activeLink('content')"
+                class="nav-link">
+                <i class="fa fa-circle-o nav-icon"></i>
+                <p>Posts</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a [routerLink]="['/admin/category']" routerLinkActive="active" (click)="activeLink('content')"
+                class="nav-link">
+                <i class="fa fa-circle-o nav-icon"></i>
+                <p>Category</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a [routerLink]="['/admin/comment']" routerLinkActive="active" (click)="activeLink('content')"
+                class="nav-link">
+                <i class="fa fa-circle-o nav-icon"></i>
+                <p>Comments</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item has-treeview">
+          <a #statistical class="nav-link pointer">
+            <i class="nav-icon fa fa-pie-chart"></i>
+            <p>
+              Statistical
+              <i class="fa fa-angle-left right"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a [routerLink]="['/admin/statispost']" routerLinkActive="active" (click)="activeLink('statistical')"
+                class="nav-link">
+                <i class="fa fa-circle-o nav-icon"></i>
+                <p>Posts</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a [routerLink]="['/admin/statiscomment']" routerLinkActive="active" (click)="activeLink('statistical')"
+                class="nav-link">
+                <i class="fa fa-circle-o nav-icon"></i>
+                <p>Comments</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a [routerLink]="['/admin/statisuser']" routerLinkActive="active" (click)="activeLink('statistical')"
+                class="nav-link">
+                <i class="fa fa-circle-o nav-icon"></i>
+                <p>Users</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item has-treeview">
+          <a #notify class="nav-link pointer">
+            <i class="nav-icon fa fa-commenting-o"></i>
+            <p>
+              Notification
+              <i class="fa fa-angle-left right"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a [routerLink]="['/admin/message']" routerLinkActive="active" (click)="activeLink('notify')"
+                class="nav-link">
+                <i class="fa fa-circle-o nav-icon"></i>
+                <p>Message</p>
+              </a>
+            </li>
+            <li *ngIf="adminCheck" class="nav-item">
+              <a [routerLink]="['/admin/notify']" routerLinkActive="active" (click)="activeLink('notify')"
+                class="nav-link">
+                <i class="fa fa-circle-o nav-icon"></i>
+                <p>Admin</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item has-treeview">
+          <a #users class="nav-link pointer">
+            <i class="nav-icon fa fa-user-secret"></i>
+            <p>
+              Users
+              <i class="fa fa-angle-left right"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li *ngIf="adminCheck" class="nav-item">
+              <a [routerLink]="['/admin/role']" routerLinkActive="active" (click)="activeLink('users')"
+                class="nav-link">
+                <i class="fa fa-circle-o nav-icon"></i>
+                <p>Roles</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a [routerLink]="['/admin/guest']" routerLinkActive="active" (click)="activeLink('users')"
+                class="nav-link">
+                <i class="fa fa-circle-o nav-icon"></i>
+                <p>Guests</p>
+              </a>
+            </li>
+            <li *ngIf="adminCheck" class="nav-item">
+              <a [routerLink]="['/admin/user']" routerLinkActive="active" (click)="activeLink('users')"
+                class="nav-link">
+                <i class="fa fa-circle-o nav-icon"></i>
+                <p>Users</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+    <!-- /.sidebar-menu -->
+  </div>
+  <!-- /.sidebar -->
+</aside>

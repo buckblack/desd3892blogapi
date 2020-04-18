@@ -1,0 +1,81 @@
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Statistical Post of Category</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a [routerLink]="['/admin']">Home</a></li>
+                        <li class="breadcrumb-item active">Statistical Posts</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <!-- general form elements -->
+                    <div class="card card-warning">
+                        <div class="card-header">
+                            <h3 class="card-title">Sort</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                        <div class="row card-body">
+                            <div class="form-group col-md-6">
+                                <label for="exampleInputEmail1">From</label>
+                                <input type="date" class="form-control" [ngModel] ="dateFrom | date:'yyyy-MM-dd'" (ngModelChange)="dateFrom = $event" name="dateFrom" placeholder="Enter email" />
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="exampleInputEmail1">To</label>
+                                <input type="date" class="form-control" [ngModel] ="dateTo | date:'yyyy-MM-dd'" (ngModelChange)="dateTo = $event" name="dateFrom" name="dateTo" placeholder="Enter email" />
+                            </div>
+                            <div class="col-md-6 pb-2">
+                                <button class="btn btn-info w-100 h-100" (click)="loadChartByTime()">Sort By Time</button>
+                            </div>
+                            <div class="col-md-6 pb-2">
+                                <button class="btn btn-success w-100 h-100" (click)="loadChartAllTime()">Sort All Time</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card -->
+                    <!-- Form Element sizes -->
+                    <div class="card card-outline card-info">
+                        <div class="card-header">
+                            <h3 class="card-title">Chart</h3>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="chartPost"></canvas>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+</div>
+
+<!-- Modal loading-->
+<div class="modal fade" bsModal #modalLoading="bs-modal">
+    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-center py-5">
+                    <div class="spinner-border text-primary" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </div>
+            </div>
+        </div>
+    </div>
+  </div>

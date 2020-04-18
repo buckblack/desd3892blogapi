@@ -1,0 +1,9 @@
+.my-pagination /deep/ {
+  text-align: center;
+}
+.my-pagination /deep/ .ngx-pagination .disabled {
+    color: black !important;
+  }
+  .my-pagination /deep/ .ngx-pagination .current {
+    border-radius: 2px;
+  }

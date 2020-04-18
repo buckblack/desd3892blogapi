@@ -1,0 +1,196 @@
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header" id="userInfo">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>Users</h1>
+        </div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a [routerLink]="['/admin']">Home</a></li>
+            <li class="breadcrumb-item active">Users</li>
+          </ol>
+        </div>
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <!-- general form elements -->
+          <div class="card card-warning">
+            <div class="card-header">
+              <h3 class="card-title">Create and Update</h3>
+            </div>
+            <!-- /.card-header -->
+            <!-- form start -->
+            <div class="row card-body">
+                <div class="form-group col-md-6">
+                  <label>Role</label>
+                  <select class="form-control" [(ngModel)]="userInfoRoleId" #role="ngModel" required name="role">
+                    <option *ngFor="let row of lstRole" [value]="row.id">{{row.roleName}}</option>
+                  </select>
+                  <small class="text-danger" *ngIf="userCheck && role.invalid">Please select role</small>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>Full name</label>
+                  <input type="text" required name="userFullName" #userFullName="ngModel"
+                    [(ngModel)]="userInfoFullName" class="form-control" placeholder="Enter your name" />
+                  <small class="text-danger" *ngIf="userCheck && userFullName.invalid">Please enter name</small>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>Phone</label>
+                  <input type="tel" name="userPhone" #userPhone="ngModel" required [(ngModel)]="userInfoPhoneNumber" class="form-control"
+                    placeholder="Enter your phone" />
+                    <small class="text-danger" *ngIf="userCheck && userPhone.invalid">Please enter phone</small>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>Email</label>
+                  <input type="email" required name="userEmail" #userEmail="ngModel" [(ngModel)]="userInfoEmail" class="form-control"
+                    placeholder="Enter your email" />
+                    <small class="text-danger" *ngIf="userCheck && userEmail.invalid">Please enter email</small>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>Password</label>
+                  <input type="password" required name="userPassword" #userPassword="ngModel" [(ngModel)]="userInfoPassword" class="form-control"
+                    placeholder="Enter your password" />
+                    <small class="text-danger" *ngIf="userCheck && newOrUpdate && userPassword.invalid">Please enter password</small>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>Address</label>
+                  <input type="text" name="userAddress" required #userAddress="ngModel" [(ngModel)]="userInfoAddress" class="form-control"
+                    placeholder="Enter your address" />
+                    <small class="text-danger" *ngIf="userCheck && userAddress.invalid">Please enter email</small>
+                </div>
+                <div class="form-group col-12">
+                  <label>Description</label>
+                  <input type="text" name="userDescription" required #userDescription="ngModel" [(ngModel)]="userInfoDescription" class="form-control"
+                    placeholder="Enter your description" />
+                    <small class="text-danger" *ngIf="userCheck && userDescription.invalid">Please enter description</small>
+                </div>
+                <div class="form-group col-12">
+                  <label>Avatar</label>
+                  <div class="custom-file">
+                    <input type="file" (change)="handleUpload($event)" #avatar="ngModel" [(ngModel)]="imgTmp" required class="custom-file-input"
+                      id="imageFile" name="userPathAvatar">
+                    <label class="custom-file-label" for="customFile" #fileUpload>Choose file</label>
+                  </div>
+                  <small class="text-danger" *ngIf="userCheck && newOrUpdate && avatar.invalid">Please select image</small>
+                </div>
+                <div class="col-12 col-md-4 mb-2">
+                  <button type="button" class="btn btn-success w-100" 
+                  (click)="newOrUpdate=true; userCheck=true;role.valid &&  userFullName.valid && userPassword.valid && avatar.valid && userPhone.valid && userEmail.valid && userAddress.valid && userDescription.valid && modalConfirm.show()"
+                  >New</button>
+                </div>
+                <div class="col-12 col-md-4 mb-2">
+                  <button type="button" class="btn btn-info w-100" 
+                  (click)="newOrUpdate=false; userCheck=true;role.valid &&  userFullName.valid && userPhone.valid && userEmail.valid && userAddress.valid && userDescription.valid && modalConfirm.show()"
+                  >Update</button>
+                </div>
+                <div class="col-12 col-md-4 mb-2">
+                  <button type="button" (click)="reset()" class="btn btn-outline-primary w-100">Reset</button>
+                </div>
+            </div>
+          </div>
+          <!-- /.card -->
+          <!-- Form Element sizes -->
+          <div class="card card-outline card-info">
+            <div class="card-header">
+              <h3 class="card-title">Users</h3>
+            </div>
+            <div class="card-body">
+              <table data-bind="visible: true" id="tableUser" class="w-100 table table-hover table-bordered table-responsive-xl">
+                <thead class="text-center">
+                  <tr>
+                    <th>Avatar</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Address</th>
+                    <th>Role</th>
+                    <th>Description</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  <tr class="text-center" *ngFor="let row of lstUser" (click)="showUpdate(row.id)">
+                    <td><img class="img-thumbnail user-thumbnail-admin" src='{{row.pathAvatar}}' /></td>
+                    <td>{{row.fullName}}</td>
+                    <td>{{row.email}}</td>
+                    <td>{{row.phoneNumber}}</td>
+                    <td>{{row.address}}</td>
+                    <td>{{row.role.roleName}}</td>
+                    <td>{{row.description}}</td>
+                    <td class="text-center">
+                      <button class="btn btn-outline-danger" *ngIf="row.status==0" title="Disable" (click)="userStatus=1; modalConfirmStatus.show()"><i class="fa fa-trash-o"></i></button>
+                      <button class="btn btn-outline-warning" *ngIf="row.status!=0" title="Enable" (click)="userStatus=0; modalConfirmStatus.show()"><i class="fa fa-eye"></i></button>
+                    </td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+      </div>
+      <!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </section>
+  <!-- /.content -->
+</div>
+
+<!-- Modal confirm-->
+<div class="modal fade" bsModal #modalConfirm="bs-modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirm</h5>
+        <button type="button" class="close" (click)="modalConfirm.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="newOrUpdate; then new else update"></div>
+        <ng-template #new>
+          <h2>Create new {{userInfoFullName}}</h2>
+        </ng-template>
+        <ng-template #update>
+          <h2>Update {{userInfoFullName}}</h2>
+          <h5 class="text-danger">Email & Password will not update</h5>
+        </ng-template>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modalConfirm.hide()">No</button>
+        <button type="button" class="btn btn-primary" (click)="submitChange()">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal update status user-->
+<div class="modal fade" bsModal #modalConfirmStatus="bs-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm</h5>
+                    <button type="button" class="close" (click)="modalConfirmStatus.hide()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                {{userStatus==1?"Disable "+userInfoFullName:"Enable "+userInfoFullName}}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="modalConfirmStatus.hide()">No</button>
+                <button type="button" class="btn btn-primary" (click)="updateSatusUser()">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>

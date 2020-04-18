@@ -1,0 +1,246 @@
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">Home</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="javascripts:void(0)">Home</a></li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <!-- Info boxes -->
+            <div class="row">
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-info elevation-1"><i class="fa fa-edit"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Post</span>
+                            <span class="info-box-number">{{dashBoardInit.countPost}}</span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+                <!-- /.col -->
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="info-box mb-3">
+                        <span class="info-box-icon bg-danger elevation-1"><i class="fa fa-newspaper-o"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Category</span>
+                            <span class="info-box-number">{{dashBoardInit.countCategory}}</span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+                <!-- /.col -->
+                <!-- fix for small devices only -->
+                <div class="clearfix hidden-md-up"></div>
+
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="info-box mb-3">
+                        <span class="info-box-icon bg-success elevation-1"><i class="fa fa-users"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Guests</span>
+                            <span class="info-box-number">{{dashBoardInit.countGuest}}</span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+                <!-- /.col -->
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="info-box mb-3">
+                        <span class="info-box-icon bg-warning elevation-1"><i class="fa fa-user-secret"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Member</span>
+                            <span class="info-box-number">{{dashBoardInit.countMember}}</span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+
+            <!-- Main row -->
+            <div class="row">
+                <!-- Left col -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header border-transparent">
+                            <h3 class="card-title">Hot Posts</h3>
+
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body p-0 table-responsive">
+                            <table class="table table-hover table-bordered my-2 table-border-top">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Sub-Category</th>
+                                        <th>Title</th>
+                                        <th>User</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let row of dashBoardInit.lstPostHot | paginate: { id:'paginationPostHot', itemsPerPage: 10, currentPage: pagePostHot }">
+                                        <td>{{row.id}}</td>
+                                        <td class="admin-user">{{row.subCateName}}</td>
+                                        <td data-toggle="tooltip" data-placement="top" title="{{row.postTitle}}" class="limit-text">{{row.postTitle}}</td>
+                                        <td class="admin-user">{{row.fullName}}</td>
+                                        <td class="admin-user">{{row.dateCreate | date:'shortDate'}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="text-center">
+                                <pagination-controls id="paginationPostHot" class="my-pagination" responsive="true" (pageChange)="pagePostHot = $event"></pagination-controls>
+                            </div>
+                            <!-- /.table-responsive -->
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer text-center">
+                            <a [routerLink]="['/admin/post']" class="uppercase">View All Post</a>
+                        </div>
+                        <!-- /.card-footer -->
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <h3 class="card-title">Statistical</h3>
+
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body p-0">
+                            <canvas id="chartDashboard" class="h-100"></canvas>
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer text-center">
+                            <a [routerLink]="['/admin/statispost']" class="uppercase">More Statistical</a>
+                        </div>
+                        <!-- /.card-footer -->
+                    </div>
+                </div>
+                <!-- /.col -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header border-transparent">
+                            <h3 class="card-title">New Comments</h3>
+
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body p-0 table-responsive">
+                            <table class="table table-hover table-bordered table-border-top my-2">
+                                <thead>
+                                    <tr>
+                                        <th>PostID</th>
+                                        <th>Name</th>
+                                        <th>Content</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let row of dashBoardInit.lstCommentNew | paginate: { id:'paginationCommentNew', itemsPerPage: 10, currentPage: pageCommentNew }">
+                                        <td>{{row.postId}}</td>
+                                        <td>{{row.guest.fullName}}</td>
+                                        <td title="{{row.contentComment}}" class="limit-text">{{row.contentComment}}</td>
+                                        <td class="admin-user">{{row.dateCreate | date:'shortDate'}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="text-center">
+                                <pagination-controls id="paginationCommentNew" class="my-pagination" responsive="true" (pageChange)="pageCommentNew = $event"></pagination-controls>
+                            </div>
+                                <!-- /.table-responsive -->
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer text-center">
+                            <a [routerLink]="['/admin/comment']" class="uppercase">View All Comments</a>
+                        </div>
+                        <!-- /.card-footer -->
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header border-transparent">
+                            <h3 class="card-title">New Posts</h3>
+
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body p-0 table-responsive">
+                            <table class="table table-hover table-bordered table-border-top my-2">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Sub-Category</th>
+                                        <th>Title</th>
+                                        <th>User</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let row of dashBoardInit.lstPostNew | paginate: { itemsPerPage: 10, currentPage: pagePostNew }">
+                                        <td>{{row.id}}</td>
+                                        <td class="admin-user">{{row.subCategories.subCateName}}</td>
+                                        <td title="{{row.postTitle}}" class="limit-text">{{row.postTitle}}</td>
+                                        <td class="admin-user">{{row.user.fullName}}</td>
+                                        <td class="admin-user">{{row.dateCreate | date:'shortDate'}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="text-center">
+                                <pagination-controls class="my-pagination" responsive="true" (pageChange)="pagePostNew = $event"></pagination-controls>
+                            </div>
+                                <!-- /.table-responsive -->
+                        </div>
+                        <!-- /.card-body -->
+                        <div class="card-footer text-center">
+                            <a [routerLink]="['/admin/post']" class="uppercase">View All Post</a>
+                        </div>
+                        <!-- /.card-footer -->
+                    </div>
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div><!--/. container-fluid -->
+    </section>
+    <!-- /.content -->
+</div>

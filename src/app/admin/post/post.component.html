@@ -1,0 +1,344 @@
+<div class="content-wrapper">
+  <div class="toast" data-autoHide="false" style="position: absolute; top: 0; right: 0; z-index:999; width:200px">
+    <div class="toast-header">
+      <strong class="mr-auto text-danger" id="toastTitle"></strong>
+      <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="toast-body" id="toastBody"></div>
+  </div>
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>Posts</h1>
+        </div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a [routerLink]="['/admin']">Home</a></li>
+            <li class="breadcrumb-item active">Posts</li>
+          </ol>
+        </div>
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <!-- general form elements -->
+          <div class="card card-warning">
+            <div class="card-header">
+              <h3 class="card-title">Sort and Create</h3>
+            </div>
+            <!-- /.card-header -->
+            <!-- form start -->
+            <div class="row card-body">
+              <div class="form-group col-md-6">
+                <label>Category</label>
+                <select name="sl_category" [(ngModel)]="sl_category" (change)="loadSubcategory()"
+                  class="form-control">
+                  <option *ngFor="let row of lstCategory" value="{{row.id}}">{{row.cateName}}</option>
+                </select>
+              </div>
+              <div class="form-group col-md-6">
+                <label>Sub-Category</label>
+                <select id="sl_subCategory" [(ngModel)]="sl_subCategory" (change)="loadPost()" class="form-control">
+                  <option *ngFor="let row of lstSubCategory" value="{{row.id}}">{{row.subCateName}}</option>
+                </select>
+              </div>
+              <div class="col-md-6 mb-2">
+                <div class="input-group">
+                  <input type="text" name="searchId" required #keyId="ngModel" [(ngModel)]="searchId" class="form-control" placeholder="search by post id">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-info" (click)="checkValid=true; keyId.valid && sortById()" type="button"><i class="fa fa-search"></i></button>
+                  </div>
+                </div>
+                <small *ngIf="keyId.invalid && checkValid" class="text-danger">Please enter post id</small>
+              </div>
+              <div class="col-md-6 mb-2">
+                <button class="btn btn-success w-100" (click)="showNew()">New</button>
+              </div>
+            </div>
+          </div>
+          <!-- /.card -->
+          <!-- Form Element sizes -->
+          <div class="card card-outline card-info">
+            <div class="card-header">
+              <h3 class="card-title">Sort result</h3>
+            </div>
+            <div class="card-body">
+              <table id="tablePost" class="w-100 table table-hover table-bordered table-responsive">
+                <thead *ngIf="lstPost!=undefined && lstPost.length>0" class="text-center">
+                  <tr>
+                    <th>ID</th>
+                    <th>Thumbnail</th>
+                    <th>Title</th>
+                    <th>Summary </th>
+                    <th>Comments</th>
+                    <th>User Create</th>
+                    <th>Date</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let row of lstPost">
+                    <td class="text-center">{{row.id}}</td>
+                    <td><img src="{{row.pathThumbnail}}" alt="{{row.postTitle}}"
+                        class="img-thumbnail post-thumbnail-admin"></td>
+                    <td class="admin-title">{{row.postTitle}}</td>
+                    <td class="admin-summarycontent">{{row.summaryContent}}</td>
+                    <td class="text-center">{{row.comments.length}}</td>
+                    <td class="admin-user">{{row.user.fullName}}</td>
+                    <td>{{row.dateCreate | date:'short'}}</td>
+                    <td class="text-center admin-button-action">
+                      <button class="btn btn-outline-info" title="Edit Post" (click)="updatePost(row.id)"><i class="fa fa-pencil"></i></button>
+                      <button *ngIf="row.status==0" title="Disable Post" (click)="disablePost(row.id)" class="btn btn-outline-danger"><i class="fa fa-trash-o"></i></button>
+                      <button *ngIf="row.status!=0" title="Enable Post" (click)="enablePost(row.id)" class="btn btn-outline-warning"><i class="fa fa-eye"></i></button>
+                      <button class="btn btn-outline-primary" title="Clean image content" (click)="RemoveTrashImage(row.id)"><i class="fa fa-file-image-o"></i></button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+      </div>
+      <!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </section>
+  <!-- /.content -->
+</div>
+
+<!-- Modal new-->
+<div bsModal #modalNew="bs-modal" [config]="{backdrop:'static'}" class="modal fade">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">New Post</h5>
+        <button type="button" class="close" (click)="modalNew.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="categoryName">Category Name</label>
+          <input type="text" [(ngModel)]="categoryData.cateName" readonly class="form-control" name="cateName">
+        </div>
+        <div class="form-group">
+          <label for="subCategoryName">Sub-Category Name</label>
+          <input type="text" readonly [(ngModel)]="subCategoryData.subCateName" class="form-control" name="subCateName">
+        </div>
+        <div class="form-group">
+          <label for="postTitle">Title</label>
+          <input type="text" class="form-control" [(ngModel)]="postNew.postTitle" name="postTitle" placeholder="Enter title">
+        </div>
+        <div class="form-group">
+          <label for="summaryContent">Summary content</label>
+          <input type="text" class="form-control" [(ngModel)]="postNew.summaryContent" name="summaryContent" placeholder="Enter summary content">
+        </div>
+        <div class="form-group">
+          <label for="exampleInputFile">Thumbnail</label>
+          <div class="custom-file">
+            <input type="file" (change)="handleUploadNew($event)" class="custom-file-input" id="imageFile"
+              name="pathThumbnail">
+            <label class="custom-file-label" #fileNameNew for="customFile">Choose file</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Content Detail</label><br />
+          <label>More Images</label>
+          <small class="text-danger">You must submit and add more images in edit</small>
+          <ckeditor editorUrl="http://cdn.ckeditor.com/4.14.0/full/ckeditor.js"
+          [(ngModel)]="postNew.detailContent" [config]="{ toolbarGroups : [
+                        { name: 'document', groups: ['mode', 'document', 'doctools'] },
+                        { name: 'clipboard', groups: ['clipboard', 'undo'] },
+                        { name: 'editing', groups: ['find', 'selection', 'spellchecker', 'editing'] },
+                        { name: 'forms', groups: ['forms'] },
+                        '/',
+                        { name: 'basicstyles', groups: ['basicstyles', 'cleanup'] },
+                        { name: 'paragraph', groups: ['list', 'indent', 'blocks', 'align', 'bidi', 'paragraph'] },
+                        { name: 'links', groups: ['links'] },
+                        { name: 'insert', groups: ['insert'] },
+                        '/',
+                        { name: 'styles', groups: ['styles'] },
+                        { name: 'colors', groups: ['colors'] },
+                        { name: 'tools', groups: ['tools'] },
+                        { name: 'others', groups: ['others'] },
+                        { name: 'about', groups: ['about'] }
+                    ]
+                }"></ckeditor>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modalNew.hide()">Close</button>
+        <button type="button" class="btn btn-primary" (click)="modalConfirm.show()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div bsModal #modalUpdate="bs-modal" [config]="{backdrop:'static'}" class="modal fade modal-scroll">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Update Post</h5>
+        <button type="button" class="close" (click)="modalUpdate.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Category</label>
+          <select name="sl_categoryUd" 
+            class="form-control" [(ngModel)]="sl_categoryUd" (change)="loadSubCateGoryUpdate()">
+            <option *ngFor="let row of lstCategory" value="{{row.id}}">{{row.cateName}}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Sub-Category</label>
+          <select class="form-control" [(ngModel)]="sl_subCategoryUd">
+            <option *ngFor="let row of lstSubCategoryUd" value="{{row.id}}">{{row.subCateName}}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="postTitle">Title</label>
+          <input type="text" class="form-control" [(ngModel)]="postUpdate.postTitle" name="postTitle" placeholder="Enter title">
+        </div>
+        <div class="form-group">
+          <label for="summaryContent">Summary content</label>
+          <input type="text" class="form-control" name="summaryContent" [(ngModel)]="postUpdate.summaryContent" placeholder="Enter summary content">
+        </div>
+        <div class="form-group">
+          <label for="exampleInputFile">Thumbnail</label>
+          <div class="custom-file">
+            <input type="file" (change)="handleUploadUpdate($event)" class="custom-file-input"
+              name="pathThumbnail">
+            <label class="custom-file-label" #fileNameUpdate for="customFile">Choose file</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Content Detail</label><br />
+          <label>More Images</label>
+          <div class="custom-file">
+            <input type="file" class="custom-file-input" (change)="handleUploadMoreImageUpdate($event)">
+            <label class="custom-file-label" for="customFile">Choose image and add to detail content</label>
+          </div>
+          <ckeditor editorUrl="http://cdn.ckeditor.com/4.14.0/full/ckeditor.js"
+           [(ngModel)]="postUpdate.detailContent" [config]="{ toolbarGroups : [
+                        { name: 'document', groups: ['mode', 'document', 'doctools'] },
+                        { name: 'clipboard', groups: ['clipboard', 'undo'] },
+                        { name: 'editing', groups: ['find', 'selection', 'spellchecker', 'editing'] },
+                        { name: 'forms', groups: ['forms'] },
+                        '/',
+                        { name: 'basicstyles', groups: ['basicstyles', 'cleanup'] },
+                        { name: 'paragraph', groups: ['list', 'indent', 'blocks', 'align', 'bidi', 'paragraph'] },
+                        { name: 'links', groups: ['links'] },
+                        { name: 'insert', groups: ['insert'] },
+                        '/',
+                        { name: 'styles', groups: ['styles'] },
+                        { name: 'colors', groups: ['colors'] },
+                        { name: 'tools', groups: ['tools'] },
+                        { name: 'others', groups: ['others'] },
+                        { name: 'about', groups: ['about'] }
+                    ]
+                }"></ckeditor>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modalUpdate.hide()">Close</button>
+        <button type="button" class="btn btn-primary" (click)="modalConfirm.show()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal confirm-->
+<div class="modal fade" bsModal #modalConfirm="bs-modal">
+  <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirm</h5>
+          <button type="button" class="close" (click)="modalConfirm.hide()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      <div class="modal-body text-center">
+        <div *ngIf="newOrUpdate">Add new post?</div>
+        <div *ngIf="!newOrUpdate">Update Post [{{postUpdate['id']}}]?</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modalConfirm.hide()">No</button>
+        <button type="button" *ngIf="newOrUpdate" class="btn btn-primary" (click)="submitNew()">Yes</button>
+        <button type="button" *ngIf="!newOrUpdate" class="btn btn-primary" (click)="submitUpdate()">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal update status-->
+<div class="modal fade" bsModal #modalConfirmStatus="bs-modal">
+  <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirm</h5>
+          <button type="button" class="close" (click)="modalConfirmStatus.hide()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      <div class="modal-body text-center">
+        <div *ngIf="disOrEnable">Disable post [{{postNew.Id}}]</div>
+        <div *ngIf="!disOrEnable">Enable post [{{postNew.Id}}]</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modalConfirmStatus.hide()">No</button>
+        <button type="button" class="btn btn-primary" (click)="submitStatus()">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal confirm remove trash image-->
+<div class="modal fade" bsModal #modalConfirmTrashImage="bs-modal">
+  <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirm</h5>
+          <button type="button" class="close" (click)="modalConfirmTrashImage.hide()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      <div class="modal-body text-center">
+        <strong class="text-danger">This action will remove images don't use in content of post</strong>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modalConfirmTrashImage.hide()">No</button>
+        <button type="button" class="btn btn-primary" (click)="SubmitRemoveTrahImage()">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal loading-->
+<div class="modal fade" bsModal #modalLoading="bs-modal">
+  <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+      <div class="modal-content">
+          <div class="modal-body">
+              <div class="d-flex justify-content-center py-5">
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                </div>
+          </div>
+      </div>
+  </div>
+</div>

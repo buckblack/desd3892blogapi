@@ -1,0 +1,102 @@
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Messages</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a [routerLink]="['/']">Home</a></li>
+                        <li class="breadcrumb-item active">Messages</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <!-- Form Element sizes -->
+                    <div class="card card-outline card-info">
+                        <div class="card-header">
+                            <h3 class="card-title">List messages</h3>
+                        </div>
+                        <div class="card-body">
+                            <table id="tableNotify" class="table table-striped table-hover table-bordered table-responsive-sm">
+                                <thead class="thead-inverse">
+                                    <tr class="text-center">
+                                        <th>From</th>
+                                        <th>Title</th>
+                                        <th>Date</th>
+                                        <th *ngIf="adminCheck"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let row of lstNotify">
+                                            <td>{{row.user.fullName}}</td>
+                                            <td>{{row.notifyTitle}}</td>
+                                            <td>{{row.dateCreate | date:'short'}}</td>
+                                            <td class="text-center">
+                                                <button class="btn btn-outline-info" title="View Detail"(click)="content=row.contentNotify; modalDetail.show()"><i class="fa fa-eye"></i></button>
+                                                <button class="btn btn-outline-danger" title="Delete" *ngIf="adminCheck" (click)="ConfirmDelete(row.id)"><i class="fa fa-trash-o"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+</div>
+
+ <!-- Modal -->
+ <div class="modal fade" bsModal #modalDetail="bs-modal">
+     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <h5 class="modal-title">Detail</h5>
+                     <button type="button" class="close" (click)="modalDetail.hide()">
+                         <span aria-hidden="true">&times;</span>
+                     </button>
+             </div>
+             <div class="modal-body" [innerHTML]="content">
+                 
+             </div>
+             <div class="modal-footer">
+                 <button type="button" class="btn btn-secondary" (click)="modalDetail.hide()">Close</button>
+             </div>
+         </div>
+     </div>
+ </div>
+
+  <!-- Modal -->
+  <div class="modal fade" bsModal #modalConfirm="bs-modal">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm</h5>
+                    <button type="button" class="close" (click)="modalConfirm.hide()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                Delete Notify?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="modalConfirm.hide()">Close</button>
+                <button type="button" class="btn btn-primary" (click)="SubmitDelete()">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,124 @@
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Roles</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a [routerLink]="['/admin/role']">Home</a></li>
+                        <li class="breadcrumb-item active">Roles</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <!-- general form elements -->
+                    <div class="card card-warning">
+                        <div class="card-header">
+                            <h3 class="card-title">Create</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                        <div class="row card-body">
+                                <div class="form-group col-12">
+                                    <label>Role name</label>
+                                    <input type="text" name="roleName" [(ngModel)]="roleName" class="form-control" placeholder="Enter role name" />
+                                </div>
+                                <div class="form-group col-12">
+                                    <button type="button" (click)="addNewRole()" class="btn btn-success w-100">New</button>
+                                </div>
+                        </div>
+                    </div>
+                    <!-- /.card -->
+                    <!-- Form Element sizes -->
+                    <div class="card card-outline card-info">
+                        <div class="card-header">
+                            <h3 class="card-title">List roles</h3>
+                        </div>
+                        <div class="card-body px-0">
+                            <table class="w-100 table table-hover table-bordered">
+                                <thead class="text-center">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Role name</th>
+                                        <th>Users</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="text-center" *ngFor="let row of lstRole">
+                                        <td>{{row.id}}</td>
+                                        <td>{{row.roleName}}</td>
+                                        <td>{{row.users.length}}</td>
+                                        <td class="text-center">
+                                            <button *ngIf="!(row.roleName==='Admin')" class="btn btn-outline-info" (click)="viewEdit(row.id,row.roleName)"><i class="fa fa-pencil-square-o"></i></button>
+                                            <button *ngIf="!(row.roleName==='Admin')" class="btn btn-outline-danger" (click)="viewRemove(row.id,row.roleName)"><i class="fa fa-trash-o"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+</div>
+
+<!-- Modal edit-->
+<div class="modal fade" bsModal #modalEditView="bs-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Update Role</h5>
+                    <button type="button" class="close" (click)="modalEditView.hide()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group col-12">
+                    <label>Role name</label>
+                    <input type="text" name="roleName" [(ngModel)]="roleView.roleName" class="form-control" placeholder="Enter role name" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="modalEditView.hide()">Close</button>
+                <button type="button" class="btn btn-primary" (click)="submitEdit()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal remove-->
+<div class="modal fade" bsModal #modalConfirmRemove="bs-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm</h5>
+                    <button type="button" class="close" (click)="modalConfirmRemove.hide()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                <div class="h2">Delete role ["{{roleView.roleName}}"]</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="modalConfirmRemove.hide()">No</button>
+                <button type="button" class="btn btn-primary" (click)="submitRemove()">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
