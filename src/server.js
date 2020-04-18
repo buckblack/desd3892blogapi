@@ -7,6 +7,8 @@ app.use(express.static(__dirname + '/src'));
 
 // Send all requests to index.html
 app.get('/*', function(req, res) {
+    console.log(__dirname);
+
     res.sendFile(path.join(__dirname + '/src/index.html'));
 });
 
