@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 export class ApiService {
 
   constructor() { }
-  baseUrl = 'http://localhost:63168/api/';
+  baseUrl = 'http://buckblack-001-site1.ctempurl.com/api/';
   apiUrl = {
     postHot: this.baseUrl + 'post/getpostshot',
     postRelated: this.baseUrl + 'post/getpostsrelated',
